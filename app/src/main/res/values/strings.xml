@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MyNote</string>
+    <string name="action_settings">Settings</string>
+    <string name="preference">main_prefs</string>
+    <string name="successSaveMessage">Сохранение произошло</string>
+    <string name="errorSaveMessage">Сохранение не произошло</string>
+    <string name="emptySaveMessage">Пустая заметка, заметка не сохранена</string>
+    <string name="save">Сохранить</string>
+    <string name="name">Название</string>
+    <string name="write_smth">Напишите что-нибудь</string>
+</resources>
