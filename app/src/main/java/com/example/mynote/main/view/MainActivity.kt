@@ -1,4 +1,4 @@
-package com.example.mynote.main
+package com.example.mynote.main.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -7,10 +7,13 @@ import android.view.MenuItem
 import android.widget.EditText
 import android.widget.Toast
 import com.example.mynote.R
+import com.example.mynote.main.model.MainModel
+import com.example.mynote.main.presenter.MainPresenter
+import com.example.mynote.main.presenter.NotePresenter
 
-class MainActivity : AppCompatActivity(), NoteView{
+class MainActivity : AppCompatActivity(), NoteView {
 
-    private var presenter: MainPresenter? = null
+    private var presenter: NotePresenter? = null
 
     private lateinit var nameEditText: EditText
     private lateinit var descriptionEditText: EditText
@@ -20,7 +23,7 @@ class MainActivity : AppCompatActivity(), NoteView{
         setContentView(R.layout.activity_main)
 
         initViews()
-        presenter = MainPresenter(this)
+        presenter = MainPresenter(this, MainModel())
     }
 
     private fun initViews() {
@@ -34,7 +37,7 @@ class MainActivity : AppCompatActivity(), NoteView{
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.save){
+        if (item.itemId == R.id.save) {
             presenter?.trySave(
                 nameEditText.text.toString(),
                 descriptionEditText.text.toString()
@@ -43,12 +46,9 @@ class MainActivity : AppCompatActivity(), NoteView{
         return true
     }
 
-    override fun onDestroy(){
+    override fun onDestroy() {
         super.onDestroy()
-        presenter?.view = null
-    }
-    fun showToast(text: String) {
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+        presenter = null
     }
 
     override fun onSaveSuccessEvent() {
@@ -61,5 +61,9 @@ class MainActivity : AppCompatActivity(), NoteView{
 
     override fun onAttemptSaveEmptyContent() {
         showToast(getString(R.string.emptySaveMessage))
+    }
+
+    private fun showToast(text: String) {
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 }

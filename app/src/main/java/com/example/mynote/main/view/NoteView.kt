@@ -1,4 +1,4 @@
-package com.example.mynote.main
+package com.example.mynote.main.view
 
 interface NoteView {
     fun onSaveSuccessEvent()
