@@ -1,5 +1,7 @@
 package com.example.mynote.main.presenter
 
+import android.content.Intent
+import androidx.core.content.ContextCompat.startActivity
 import com.example.mynote.main.model.NoteModel
 import com.example.mynote.main.view.NoteView
 
