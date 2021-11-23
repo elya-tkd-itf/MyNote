@@ -6,4 +6,14 @@
         android:icon="@drawable/ic_check_accent_24dp"
         android:title="@string/save"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/share"
+        android:icon="@drawable/ic_share_accent_24dp"
+        android:title="@string/share"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/about"
+        android:icon="@drawable/ic_info_accent_24dp"
+        android:title="@string/about"
+        app:showAsAction="ifRoom" />
 </menu>
