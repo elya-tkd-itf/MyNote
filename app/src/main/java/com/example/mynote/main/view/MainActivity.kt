@@ -23,7 +23,6 @@ import com.example.mynote.main.presenter.MainPresenter
 import com.example.mynote.main.presenter.NotePresenter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-
 class MainActivity : AppCompatActivity(), NoteView {
 
     private var presenter: NotePresenter? = null
