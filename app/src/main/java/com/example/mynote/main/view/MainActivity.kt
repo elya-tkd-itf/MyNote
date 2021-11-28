@@ -1,13 +1,8 @@
 package com.example.mynote.main.view
 
-import android.Manifest
-import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
@@ -15,9 +10,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import com.example.mynote.R
-import com.example.mynote.about.AboutActivity
 import com.example.mynote.main.model.MainModel
 import com.example.mynote.main.presenter.MainPresenter
 import com.example.mynote.main.presenter.NotePresenter
@@ -29,8 +22,7 @@ class MainActivity : AppCompatActivity(), NoteView {
 
     private lateinit var nameEditText: EditText
     private lateinit var descriptionEditText: EditText
-    private lateinit var photoButton: FloatingActionButton
-    private lateinit var imageView: ImageView
+    private lateinit var photoView: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,10 +35,9 @@ class MainActivity : AppCompatActivity(), NoteView {
     private fun initViews() {
         nameEditText = findViewById(R.id.nameText)
         descriptionEditText = findViewById(R.id.descriptionText)
-        imageView = findViewById(R.id.imageView)
-        photoButton = findViewById(R.id.photoButton)
-        photoButton.setOnClickListener {
-            takePicture()
+        photoView = findViewById(R.id.photoView)
+        findViewById<FloatingActionButton>(R.id.photoButton).setOnClickListener {
+            presenter?.takePicture(this)
         }
     }
 
@@ -61,13 +52,22 @@ class MainActivity : AppCompatActivity(), NoteView {
                 nameEditText.text.toString(),
                 descriptionEditText.text.toString()
             )
-            R.id.share -> shareNote(
+            R.id.share -> presenter?.shareNote(
                 nameEditText.text.toString(),
-                descriptionEditText.text.toString()
+                descriptionEditText.text.toString(),
+                this
             )
-            R.id.about -> openAboutScreen()
+            R.id.about -> presenter?.openAboutScreen(this)
         }
         return true
+    }
+
+    override fun startMyActivity(intent: Intent) {
+        startActivity(intent)
+    }
+
+    override fun startMyActivityForResult(intent: Intent, result: Int) {
+        startActivityForResult(intent, result)
     }
 
     override fun onDestroy() {
@@ -87,15 +87,8 @@ class MainActivity : AppCompatActivity(), NoteView {
         showToast(getString(R.string.emptySaveMessage))
     }
 
-    override fun shareNote(name: String, description: String) {
-        startActivity(Intent(Intent.ACTION_SEND).apply {
-            type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT, "$name\n$description")
-        })
-    }
-
-    override fun openAboutScreen() {
-        startActivity(Intent(this, AboutActivity::class.java))
+    override fun onAttemptShareEmptyContent() {
+        showToast(getString(R.string.emptyShareMessage))
     }
 
     override fun onRequestPermissionsResult(
@@ -103,81 +96,24 @@ class MainActivity : AppCompatActivity(), NoteView {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.i(TAG, "onRequestPermissionResult")
-        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
-            when {
-                grantResults.isEmpty() -> {
-                    Log.i(TAG, "User interaction was cancelled.")
-                }
-                grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
-                    dispatchTakePictureIntent()
-                }
-                else -> {
-                    Log.i(TAG, "Permission denied.")
-                }
-            }
-        }
-    }
-
-
-    override fun takePicture() {
-
-        if (!checkPermissions()) {
-            requestPermissions()
-        } else {
-            dispatchTakePictureIntent()
-        }
-    }
-
-    private fun checkPermissions(): Boolean {
-        val permissionState = ActivityCompat.checkSelfPermission(
-            this,
-            Manifest.permission.CAMERA
-        )
-        return permissionState == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestPermissions() {
-        val shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(
-            this, Manifest.permission.CAMERA
-        )
-        if (shouldProvideRationale) {
-            showToast("Разрешите использование камеры в настройках приложения")
-        } else {
-            Log.i(TAG, "Requesting permission")
-            // previously and checked "Never ask again".
-            ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.CAMERA),
-                REQUEST_PERMISSIONS_REQUEST_CODE
-            )
-        }
-    }
-
-    private fun dispatchTakePictureIntent() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        try {
-            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
-        } catch (e: ActivityNotFoundException) {
-            Log.e(TAG, e.toString())
-        }
+        presenter?.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageBitmap = data?.extras?.get("data") as Bitmap
-            imageView.setImageBitmap(imageBitmap)
-            imageView.layoutParams = LinearLayout.LayoutParams(imageView.width, 900)
+            photoView.setImageBitmap(imageBitmap)
+            photoView.layoutParams = LinearLayout.LayoutParams(photoView.width, 900)
         }
     }
 
-    private fun showToast(text: String) {
+    override fun showToast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 
     companion object {
         private val TAG = "MainActivity"
         private val REQUEST_IMAGE_CAPTURE = 1
-        private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
     }
 }
