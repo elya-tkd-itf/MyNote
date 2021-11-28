@@ -5,6 +5,7 @@
     <string name="successSaveMessage">Сохранение произошло</string>
     <string name="errorSaveMessage">Сохранение не произошло</string>
     <string name="emptySaveMessage">Пустая заметка, заметка не сохранена</string>
+    <string name="emptyShareMessage">Пустая заметка, поделиться невозможно</string>
     <string name="save">Сохранить</string>
     <string name="name">Название</string>
     <string name="write_smth">Напишите что-нибудь</string>
@@ -12,4 +13,7 @@
     <string name="about">Описание</string>
     <string name="photonote">photoNote</string>
     <string name="app_name_version">MyNote\n0.1</string>
+    <string name="plain_text">text/plain</string>
+    <string name="allow_camera">Разрешите использование камеры в настройках приложения</string>
+    <string name="requesting_permission">Requesting permission</string>
 </resources>
