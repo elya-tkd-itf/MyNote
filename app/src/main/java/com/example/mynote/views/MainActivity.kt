@@ -1,15 +1,17 @@
-package com.example.mynote.main.view
+package com.example.mynote.views
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.mynote.R
-import com.example.mynote.main.model.MainModel
-import com.example.mynote.main.presenter.MainPresenter
-import com.example.mynote.main.presenter.NotePresenter
+import com.example.mynote.models.MainModel
+import com.example.mynote.presentors.MainPresenter
+import com.example.mynote.presentors.framework.NotePresenter
+import com.example.mynote.views.framework.NoteView
 
 class MainActivity : AppCompatActivity(), NoteView {
 
@@ -37,11 +39,16 @@ class MainActivity : AppCompatActivity(), NoteView {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.save) {
-            presenter?.trySave(
+        when (item.itemId) {
+            R.id.save -> presenter?.onSaveIconClick(
                 nameEditText.text.toString(),
                 descriptionEditText.text.toString()
             )
+            R.id.share -> presenter?.onShareIconClick(
+                nameEditText.text.toString(),
+                descriptionEditText.text.toString()
+            )
+            R.id.about -> presenter?.onAboutIconClick()
         }
         return true
     }
@@ -63,7 +70,26 @@ class MainActivity : AppCompatActivity(), NoteView {
         showToast(getString(R.string.emptySaveMessage))
     }
 
+    override fun onAttemptShareEmptyContent() {
+        showToast(getString(R.string.emptyShareMessage))
+    }
+
+    override fun startSendActivity(text: String) {
+        startActivity(Intent(Intent.ACTION_SEND).apply {
+            type = TEXT_PLAIN;
+            putExtra(Intent.EXTRA_TEXT, text)
+        })
+    }
+
+    override fun openAboutScreen() {
+        startActivity(Intent(this, AboutActivity::class.java))
+    }
+
     private fun showToast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+    }
+
+    companion object {
+        private const val TEXT_PLAIN = "text/plain";
     }
 }

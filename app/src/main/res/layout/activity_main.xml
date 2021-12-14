@@ -1,36 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".main.view.MainActivity">
+    tools:context=".views.MainActivity">
 
-
-    <EditText
-        android:id="@+id/nameText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/name_margin"
-        android:hint="@string/name"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:padding="@dimen/name_padding"
-        android:textColor="@color/colorBlack"
-        android:textColorLink="@color/colorPrimaryLight"
-        android:textSize="@dimen/big_text"
-        android:textStyle="bold|italic" />
-
-    <EditText
-        android:id="@+id/descriptionText"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="start|left"
-        android:hint="@string/write_smth"
-        android:importantForAutofill="no"
-        android:padding="@dimen/description_padding"
-        android:textColor="@color/colorBlack"
-        tools:ignore="RtlHardcoded"
-        android:inputType="textMultiLine" />
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-</LinearLayout>
+        <EditText
+            android:id="@+id/nameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/name_margin"
+            android:hint="@string/name"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:padding="@dimen/name_padding"
+            android:textColor="@color/colorBlack"
+            android:textColorLink="@color/colorPrimaryLight"
+            android:textSize="@dimen/big_text"
+            android:textStyle="bold|italic" />
+
+        <EditText
+            android:id="@+id/descriptionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="start|left"
+            android:hint="@string/description_hint"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:padding="@dimen/description_padding"
+            android:textColor="@color/colorBlack"
+            tools:ignore="RtlHardcoded" />
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

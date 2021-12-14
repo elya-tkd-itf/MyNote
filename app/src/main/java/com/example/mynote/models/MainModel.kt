@@ -1,6 +1,7 @@
-package com.example.mynote.main.model
+package com.example.mynote.models
 
 import android.util.Log
+import com.example.mynote.models.framework.NoteModel
 
 class MainModel : NoteModel {
     override fun saveNote(name: String, description: String): Boolean {

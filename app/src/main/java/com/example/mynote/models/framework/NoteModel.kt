@@ -1,4 +1,4 @@
-package com.example.mynote.main.model
+package com.example.mynote.models.framework
 
 interface NoteModel {
     fun saveNote(name: String, description: String): Boolean
